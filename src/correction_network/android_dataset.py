@@ -18,10 +18,10 @@ class Android_GNSS_Dataset(Dataset):
     def __init__(self, config, transforms=None):
         self.root=config['root']
         self.raw_dir=config['raw_data_dir']
-        self.in_root = os.path.join(self.root, self.raw_dir)
+        self.in_root = os.path.join(self.root, self.raw_dir) #/deep_gnss/data/train
         
         self.data_dir = config['data_dir']
-        self.out_root = os.path.join(self.root, self.data_dir)
+        self.out_root = os.path.join(self.root, self.data_dir) #/deep_gnss/data/android_train_processed
         
         #Config information for when files are opened and sampled by DataLoader
         self.max_open_files = config['max_open_files'] #cache size
@@ -48,16 +48,16 @@ class Android_GNSS_Dataset(Dataset):
         
         # Scan directory and store all trace/phone paths
         self.trace_paths = []
-        for trace_name in sorted(os.listdir(self.in_root)):
+        for trace_name in sorted(os.listdir(self.in_root)): # trace_name: 2020-05-14-US-MTV-1
             _path = os.path.join(self.in_root, trace_name)
             for phone_type in sorted(os.listdir(_path)):
-                self.trace_paths.append(os.path.join(trace_name, phone_type))
+                self.trace_paths.append(os.path.join(trace_name, phone_type)) #2020-05-14-US-MTV-1/Pixel4
         
         # Scan files, create indices for loading, and store misc. data info
         self.num_traj = len(self.trace_paths)
         for _path in self.trace_paths:
             # Check if path, and files in path exist
-            outpath = os.path.join(self.out_root, _path)
+            outpath = os.path.join(self.out_root, _path) # deep_gnss/data/android_train_processed/2020-05-14-US-MTV-1/Pixel4
             fexists = False
             if os.path.exists(outpath):
                 files = os.listdir(outpath)

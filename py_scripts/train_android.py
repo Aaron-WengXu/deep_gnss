@@ -6,7 +6,7 @@
 ########################################################################
 import sys, os, csv, datetime
 from typing import Dict
-parent_directory = os.path.split(os.getcwd())[0]
+parent_directory = os.path.split(os.getcwd())[0] # returns the current working directory of a process
 src_directory = os.path.join(parent_directory, 'src')
 data_directory = os.path.join(parent_directory, 'data')
 ephemeris_data_directory = os.path.join(data_directory, 'ephemeris')
@@ -35,7 +35,7 @@ from correction_network.networks import Net_Snapshot, DeepSetModel
 def collate_feat(batch):
     sorted_batch = sorted(batch, key=lambda x: x['features'].shape[0], reverse=True)
     features = [x['features'] for x in sorted_batch]
-    features_padded = torch.nn.utils.rnn.pad_sequence(features)
+    features_padded = torch.nn.utils.rnn.pad_sequence(features) #pad_sequence stacks a list of Tensors along a new dimension, and pads them to equal length.
     L, N, dim = features_padded.size()
     pad_mask = np.zeros((N, L))
     for i, x in enumerate(features):
@@ -154,7 +154,7 @@ def main(config: DictConfig) -> None:
         if np.sum(mean_acc) < min_acc:
             min_acc = np.sum(mean_acc)
             torch.save(net.state_dict(), os.path.join(data_directory, 'weights', fname))
-        print('Training done for ', epoch)
+        print('Training done for ', epoch, 'Loss is',test_loss.cpu().detach().numpy())
 
 if __name__=="__main__":
     main()
