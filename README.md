@@ -1,3 +1,13 @@
+[deep_gnss](https://github.com/Stanford-NavLab/deep_gnss), developed by [Stanford-NavLab](https://github.com/Stanford-NavLab), is one of the state-of-the-art data-driven approaches to positioning with Android raw GNSS measurements, based on the set transformer architecture. It serves as the benchmark for evaluating our method, [PrNet](https://github.com/Aaron-WengXu/GNSS-ND).
+
+Slight modifications are made for the evaluation:
+* We calculate the predicted positioning results and ground truth locations in the format of latitude, longitude, and height, and write them into files (see deep_gnss/py_scripts/Corrected_Position_set_transformer.csv and deep_gnss/py_scripts/GT_set_transformer.csv). We comment the codes for computing the WLS baseline positioning results.(see codes in deep_gnss/py_scripts/eval_android.py)
+* The training data are put under "train/Route1" or "train/Route2".(see codes in deep_gnss/config/train_android_conf.yaml)
+* The testing data are put under "var/Route1" or "var/Route2".(see codes in deep_gnss/py_scripts/eval_android.py)
+* We add the MATLAB codes to plot the positioning results of [deep_gnss](https://github.com/Stanford-NavLab/deep_gnss) and ground truth.(see codes in deep_gnss/results_plotting)
+* The weights trained by us are stored under deep_gnss/weights/Route1 or Route2.
+
+# Original "README" by Stanford-NavLab
 Code repository accompanying our work on 'Improving GNSS Positioning using Neural Network-based Corrections'. In this paper, we present a Deep Neural Network (DNN) for position estimation using Global Navigation Satellite System (GNSS) measurements. This work was presented virtually at ION GNSS+ 2021 conference. The presentation can be seen [here](https://youtu.be/_ZeEkEPwtAw) and our slides can be viewed [here](https://stanford.box.com/s/dj2eg3v886u408s234p92r52nok8twst) 
 
 <!--- Badge for paper link---> <a href="https://stanford.box.com/s/vt1pq3nppz0he5i57vux02c1349x23r1"><img src="https://img.shields.io/badge/ION%20GNSS%2B%202021-paper-informational"/></a>
