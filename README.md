@@ -1,10 +1,10 @@
 [deep_gnss](https://github.com/Stanford-NavLab/deep_gnss), developed by [Stanford-NavLab](https://github.com/Stanford-NavLab), is one of the state-of-the-art data-driven approaches to positioning with Android raw GNSS measurements, based on the set transformer architecture. It serves as the benchmark for evaluating our method, [PrNet](https://github.com/Aaron-WengXu/GNSS-ND).
 
 Slight modifications are made for the evaluation:
-* We calculate the predicted positioning results and ground truth locations in the format of latitude, longitude, and height, and write them into files (see deep_gnss/py_scripts/Corrected_Position_set_transformer.csv and deep_gnss/py_scripts/GT_set_transformer.csv). We comment the codes for computing the WLS baseline positioning results.(see codes in deep_gnss/py_scripts/eval_android.py)
-* The training data are put under "train/Route1" or "train/Route2".(see codes in deep_gnss/config/train_android_conf.yaml)
-* The testing data are put under "var/Route1" or "var/Route2".(see codes in deep_gnss/py_scripts/eval_android.py)
-* We add the MATLAB codes to plot the positioning results of [deep_gnss](https://github.com/Stanford-NavLab/deep_gnss) and ground truth.(see codes in deep_gnss/results_plotting)
+* We calculate the predicted positioning results and ground truth locations in the format of latitude, longitude, and height, and write them into files (see deep_gnss/py_scripts/Corrected_Position_set_transformer.csv and deep_gnss/py_scripts/GT_set_transformer.csv). We comment the codes for computing the WLS baseline positioning results (see codes in deep_gnss/py_scripts/eval_android.py).
+* The training data are put under "train/Route1" or "train/Route2" (see codes in deep_gnss/config/train_android_conf.yaml).
+* The testing data are put under "var/Route1" or "var/Route2" (see codes in deep_gnss/py_scripts/eval_android.py).
+* We add the MATLAB codes to plot the positioning results of [deep_gnss](https://github.com/Stanford-NavLab/deep_gnss) and ground truth (see codes in deep_gnss/results_plotting).
 * The weights trained by us are stored under deep_gnss/weights/Route1 or Route2.
 
 # Original "README" by Stanford-NavLab
