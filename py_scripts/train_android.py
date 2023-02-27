@@ -8,7 +8,7 @@ import sys, os, csv, datetime
 from typing import Dict
 parent_directory = os.path.split(os.getcwd())[0] # returns the current working directory of a process
 src_directory = os.path.join(parent_directory, 'src')
-data_directory = os.path.join(parent_directory, 'data')
+data_directory = os.path.join(parent_directory, 'data') # deep_gnss/data
 ephemeris_data_directory = os.path.join(data_directory, 'ephemeris')
 sys.path.insert(0, src_directory)
 from mpl_toolkits.mplot3d import Axes3D

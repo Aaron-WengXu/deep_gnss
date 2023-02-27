@@ -29,7 +29,7 @@ from tqdm import tqdm
 from correction_network.networks import Net_Snapshot
 
 weight_dict = {
-    '15': "android_WX_2023-02-25_16-05-28",
+    '15': "android_WX_test_2023-02-27_12-50-52",
     '30': "android_transformer_1000ep_pos30_2021-08-28_11-23-06",
 }
 
@@ -37,7 +37,7 @@ key_wt = 15   # initialization range (from training) to use
 
 config = {
     "root": os.path.join(data_directory),
-    "raw_data_dir" : "val",
+    "raw_data_dir" : "val/Route2",
     "data_dir": "android_val_processed",
     "guess_range": [key_wt, key_wt, key_wt, 1e-5, 1e-5, 1e-5, 1e-5, 1e-5],
     "history": 1,
@@ -85,7 +85,7 @@ for b_t_sel in range(len(val_idx_list)-1):
     true_XYZb = np.array([_gt_data['ecefX'], _gt_data['ecefY'], _gt_data['ecefZ'], _gt_data['b']])
     base_frame = coord.LocalCoord.from_ecef(true_XYZb[:3])
 
-    in1 = pd.read_csv(os.path.join(dirname, 'goGPS_WLS.csv'))
+    # in1 = pd.read_csv(os.path.join(dirname, 'goGPS_WLS.csv'))
     b_key = b_key[0]
 
     print(b_key, b_t_idx)
@@ -121,23 +121,23 @@ for b_t_sel in range(len(val_idx_list)-1):
         y_lla_hat_ls.append(y_lla_hat)
 
     #     WLS1
-        _int1 = in1[in1['GPS Time[s]']==times[t_idx]]
-        _ecef1 = np.array([_int1['ECEF X[m]'].to_numpy()[0], _int1['ECEF Y[m]'].to_numpy()[0], _int1['ECEF Z[m]'].to_numpy()[0], _int1['Clock Bias[s]'].to_numpy()[0]*3e8])
-        ls_wls1[times[t_idx]] = _ecef1[:3]
-        y_wls_ls.append(ref_local.ecef2ned(_ecef1[:3, None])[:, 0])
+        # _int1 = in1[in1['GPS Time[s]']==times[t_idx]]
+        # _ecef1 = np.array([_int1['ECEF X[m]'].to_numpy()[0], _int1['ECEF Y[m]'].to_numpy()[0], _int1['ECEF Z[m]'].to_numpy()[0], _int1['Clock Bias[s]'].to_numpy()[0]*3e8])
+        # ls_wls1[times[t_idx]] = _ecef1[:3]
+        # y_wls_ls.append(ref_local.ecef2ned(_ecef1[:3, None])[:, 0])
 
-        ls_gt[times[t_idx]] = true_XYZb[:3]
+        # ls_gt[times[t_idx]] = true_XYZb[:3]
 
 
         b_t_idx += 1
 
 y_diff = (np.array(y_ls) - np.squeeze(np.array(y_hat_ls), axis=1)) ## y_diff = true_NED - hat_NED
 y_og = np.array(y_ls)
-y_wls = np.array(y_ls) - np.array(y_wls_ls)
+# y_wls = np.array(y_ls) - np.array(y_wls_ls)
 
 print("Mean positioning error along NED in initial positions (m): ", np.mean(np.abs(y_og), axis=0))
 print("Mean positioning error along NED in DNN corrected positions (m): ", np.mean(np.abs(y_diff), axis=0))
-print("Mean positioning error along NED in WLS positions (m): ", np.nanmean(np.abs(y_wls), axis=0))
+# print("Mean positioning error along NED in WLS positions (m): ", np.nanmean(np.abs(y_wls), axis=0))
 
 y_lla_hat_ls_df = pd.DataFrame(np.array(y_lla_hat_ls))
 y_lla_hat_ls_df.to_csv('Corrected_Position_set_transformer.csv')
