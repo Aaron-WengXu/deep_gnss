@@ -29,7 +29,7 @@ from tqdm import tqdm
 from correction_network.networks import Net_Snapshot
 
 weight_dict = {
-    '15': "android_WX_test_2023-02-27_12-50-52",
+    '15': "android_WX_test_2023-02-27_20-38-46",
     '30': "android_transformer_1000ep_pos30_2021-08-28_11-23-06",
 }
 
@@ -37,7 +37,7 @@ key_wt = 15   # initialization range (from training) to use
 
 config = {
     "root": os.path.join(data_directory),
-    "raw_data_dir" : "val/Route2",
+    "raw_data_dir" : "val/Route1",
     "data_dir": "android_val_processed",
     "guess_range": [key_wt, key_wt, key_wt, 1e-5, 1e-5, 1e-5, 1e-5, 1e-5],
     "history": 1,
@@ -52,7 +52,7 @@ config = {
 dataset = Android_GNSS_Dataset(config)
 
 net = Net_Snapshot(dataset[0]['features'].size()[1], 1, len(dataset[0]['true_correction']))
-net.load_state_dict(torch.load(os.path.join(data_directory, 'weights', weight_dict[str(key_wt)])))
+net.load_state_dict(torch.load(os.path.join(data_directory, 'weights','Route1', weight_dict[str(key_wt)])))
 net.cuda()
 
 # Create empty dicts and lists

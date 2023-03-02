@@ -10,7 +10,7 @@ clk_range: 1e-5
 vel_range_xy: 1e-5
 vel_range_z: 1e-5
 clkd_range: 1e-5
-raw_data_dir: "train/Route2"
+raw_data_dir: "train/Route1"
 data_dir: "android_train_processed"
 bias_fname: 0
 model_name: 'set_transformer'   # ['set_transformer',  'deepsets']
@@ -20,5 +20,5 @@ seed: 0
 chunk_size: 10
 max_sats: 13
 writer: True
-resume: "android_WX_test_2023-02-27_11-32-10"
+resume: "android_WX_test_2023-02-27_20-00-06"
 prefix: ??? # Prefix is a required variable to run the file
