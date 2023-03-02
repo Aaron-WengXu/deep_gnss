@@ -19,4 +19,4 @@ hold on;
 I = imread('MTV.png'); 
 h = image('XData',[-122.5, -122.0],'YData',[37.8,37.3],'CData',I);%note the latitude (y-axis) is flipped in vertical direction
 uistack(h,'bottom'); %move the image to the bottom of current stack
-saveas(figure1,[dirName,'/Results_comparison.fig']);
+saveas(figure1,'/Results_comparison.fig');
