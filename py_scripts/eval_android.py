@@ -27,17 +27,22 @@ import gnss_lib.solve_pos as solve_pos
 from correction_network.android_dataset import Android_GNSS_Dataset, expected_measurements
 from tqdm import tqdm
 from correction_network.networks import Net_Snapshot
+import time
 
+# In total 3 lines of codes need to be modified 
+
+# 1. Need to change for evaluation
 weight_dict = {
-    '15': "android_WX_test_2023-02-27_20-38-46",
-    '30': "android_transformer_1000ep_pos30_2021-08-28_11-23-06",
+    '20': "android_urban_2023-08-02_16-59-37",
+    'xx': "android_transformer_1000ep_pos30_2021-08-28_11-23-06",
 }
 
-key_wt = 15   # initialization range (from training) to use
+key_wt = 20   # initialization range (from training) to use
 
+# 2. Need to change for evaluation
 config = {
     "root": os.path.join(data_directory),
-    "raw_data_dir" : "val/Route1",
+    "raw_data_dir" : "val/RouteUS5_G",
     "data_dir": "android_val_processed",
     "guess_range": [key_wt, key_wt, key_wt, 1e-5, 1e-5, 1e-5, 1e-5, 1e-5],
     "history": 1,
@@ -52,8 +57,12 @@ config = {
 dataset = Android_GNSS_Dataset(config)
 
 net = Net_Snapshot(dataset[0]['features'].size()[1], 1, len(dataset[0]['true_correction']))
-net.load_state_dict(torch.load(os.path.join(data_directory, 'weights','Route1', weight_dict[str(key_wt)])))
+
+# 3. Need to change for evaluation
+net.load_state_dict(torch.load(os.path.join(data_directory, 'weights','RouteUS5', weight_dict[str(key_wt)])))
+
 net.cuda()
+pytorch_total_params = sum(p.numel() for p in net.parameters() if p.requires_grad)
 
 # Create empty dicts and lists
 ls_rand = {}
@@ -74,6 +83,7 @@ ls_gt_corr = {}
 # val_idx_list = [2888, 2988]
 # val_idx_list = [1, 100]
 val_idx_list = [0, len(dataset)]
+start_time = time.time()
 for b_t_sel in range(len(val_idx_list)-1):
     b_t_idx = val_idx_list[b_t_sel]
     b_key, t_idx = dataset.indices[b_t_idx]
@@ -97,8 +107,8 @@ for b_t_sel in range(len(val_idx_list)-1):
         _gt_data = all_data.iloc[0]
         true_XYZb = np.array([_gt_data['ecefX'], _gt_data['ecefY'], _gt_data['ecefZ'], _gt_data['b']])
         times = (times/1000).astype(np.int32)
-        if not b_key == key[0]:
-            break
+        # if not b_key == key[0]:
+        #     break
         f1, f2 = dataset.meas_file_paths[key].split("/")[-3:-1]
         dirname = os.path.join(config["root"], config["baselines"], f1, "output", f2)
 
@@ -131,16 +141,22 @@ for b_t_sel in range(len(val_idx_list)-1):
 
         b_t_idx += 1
 
+end_time = time.time()
 y_diff = (np.array(y_ls) - np.squeeze(np.array(y_hat_ls), axis=1)) ## y_diff = true_NED - hat_NED
 y_og = np.array(y_ls)
 # y_wls = np.array(y_ls) - np.array(y_wls_ls)
 
+# Measure inference time per sample
+elapsed_time = (end_time - start_time)/len(y_diff)
+
 print("Mean positioning error along NED in initial positions (m): ", np.mean(np.abs(y_og), axis=0))
 print("Mean positioning error along NED in DNN corrected positions (m): ", np.mean(np.abs(y_diff), axis=0))
 # print("Mean positioning error along NED in WLS positions (m): ", np.nanmean(np.abs(y_wls), axis=0))
+print("Number of trainable parameters of set transformer: ",pytorch_total_params)
+print("inference time per sample: ",elapsed_time)
 
 y_lla_hat_ls_df = pd.DataFrame(np.array(y_lla_hat_ls))
-y_lla_hat_ls_df.to_csv('Corrected_Position_set_transformer.csv')
+y_lla_hat_ls_df.to_csv('Corrected_Position_set_transformer.csv', header=False)
 
 y_lla_ls_df = pd.DataFrame(np.array(y_lla_ls))
-y_lla_ls_df.to_csv('GT_set_transformer.csv')
+y_lla_ls_df.to_csv('GT_set_transformer.csv', header=False)

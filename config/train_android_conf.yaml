@@ -1,16 +1,16 @@
 frac: 0.9
 batch_size: 8
-learning_rate: 3e-4
+learning_rate: 1e-1
 N_test_batches: 2
-N_train_epochs: 50
+N_train_epochs: 100
 num_workers: 2
-pos_range_xy: 15
-pos_range_z: 15
+pos_range_xy: 60
+pos_range_z: 60
 clk_range: 1e-5
 vel_range_xy: 1e-5
 vel_range_z: 1e-5
 clkd_range: 1e-5
-raw_data_dir: "train/Route1"
+raw_data_dir: "train/RouteUS5"
 data_dir: "android_train_processed"
 bias_fname: 0
 model_name: 'set_transformer'   # ['set_transformer',  'deepsets']
@@ -20,5 +20,5 @@ seed: 0
 chunk_size: 10
 max_sats: 13
 writer: True
-resume: "android_WX_test_2023-02-27_20-00-06"
-prefix: ??? # Prefix is a required variable to run the file
+resume: False #"android_urban_2023-08-02_16-55-58"
+prefix: 'urban' # Prefix is a required variable to run the file
